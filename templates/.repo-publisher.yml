@@ -35,6 +35,21 @@ hardening:
 release:
   strategy: none
   initial_tag: ""
+repo_polish:
+  maintenance_status: active # active | maintenance-only | deprecated | archived | experimental | internal-only
+  support_channel: ""
+  security_contact: ""
+  governance_model: none # none | maintainer-led | foundation | steering-committee | internal-owner
+  screenshots_required: false
+  demo_media_required: false
+  social_preview_required: false
+  citation_required: false
+  funding_required: false
+  releases_required: false
+  changelog_style: none # none | keep-a-changelog | generated-notes | release-please | custom
+  badge_policy: profile-default # none | profile-default | strict | package
+  issue_policy:
+    blank_issues_enabled: false
+    security_reports_external: true
 skips:
   # item: reason
-

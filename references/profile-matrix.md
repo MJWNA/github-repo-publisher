@@ -4,14 +4,16 @@ Choose one profile before creating or updating files. Profiles prevent overbuild
 
 ## Profiles
 
-| Profile | Best for | Required | Optional / conditional |
-|---|---|---|---|
-| `minimal` | Scratch, demo, private experiment | README, `.gitignore`, visibility, description | License, CI, issue templates |
-| `internal-tool` | Private business apps and operations tools | README-private, `.repo-publisher.yml`, SECURITY, CODEOWNERS, PR template, issue templates, CI, Dependabot, secret preflight | rulesets, Actions read-only setting, CodeQL, runbook links |
-| `public-oss` | Public/open-source repos | README-public, LICENSE, SECURITY, CONTRIBUTING, CODE_OF_CONDUCT, SUPPORT, issue/PR templates, topics, CI, Dependabot, rulesets | Scorecard, CodeQL, release automation, social preview |
-| `package` | npm/Python/Ruby/etc packages | public-oss baseline, package metadata, changelog/release flow, semver guidance | Release Please, semantic-release, provenance/trusted publishing |
-| `docs-site` | Documentation sites and examples | README, license decision, deploy notes, CI, link checking, docs publish workflow | Pages/Vercel/Netlify settings, release notes |
-| `strict` | Sensitive internal repos or mature public repos | strongest internal/public baseline, rulesets, CODEOWNERS, least privilege Actions, Dependabot, secret scanning, security read-back | CodeQL advanced setup, Scorecard, settings-as-code |
+| Profile | Best for | Required | README badges | Optional / conditional |
+|---|---|---|---|---|
+| `minimal` | Scratch, demo, private experiment | README, `.gitignore`, visibility, description | None by default; CI only if it exists | License, CI, issue templates |
+| `internal-tool` | Private business apps and operations tools | README-private, `.repo-publisher.yml`, SECURITY, CODEOWNERS, PR template, issue templates, CI, Dependabot, secret preflight | Usually none; private GitHub workflow badges only when useful to maintainers | rulesets, Actions read-only setting, CodeQL, runbook links |
+| `public-oss` | Public/open-source repos | README-public, LICENSE, SECURITY, CONTRIBUTING, CODE_OF_CONDUCT, SUPPORT, issue/PR templates, topics, CI, Dependabot, rulesets | CI, license, release/version if released, optional coverage/security if real | Scorecard, CodeQL, release automation, social preview |
+| `package` | npm/Python/Ruby/etc packages | public-oss baseline, package metadata, changelog/release flow, semver guidance | CI, package version, runtime support, license, coverage if enforced | Release Please, semantic-release, provenance/trusted publishing |
+| `docs-site` | Documentation sites and examples | README, license decision, deploy notes, CI, link checking, docs publish workflow | Docs build/deploy, link check, license; avoid package badges | Pages/Vercel/Netlify settings, release notes |
+| `strict` | Sensitive internal repos or mature public repos | strongest internal/public baseline, rulesets, CODEOWNERS, least privilege Actions, Dependabot, secret scanning, security read-back | Authoritative live badges only; no static health claims or vanity counters | CodeQL advanced setup, Scorecard, settings-as-code |
+
+Read `readme-badges.md` before adding badges. A small badge row can build trust; too many badges become noise.
 
 ## New Repo Versus Existing Repo
 
@@ -31,6 +33,7 @@ Existing repo:
 - Show a patch summary: create, update, leave unchanged, skipped.
 - Prefer small additive improvements.
 - Use `.repo-publisher.yml` if present to identify expected profile and prior decisions.
+- Compare badges, releases, community profile, maintenance status, social preview, citation/funding, and governance against `repo-polish-conventions.md`.
 
 ## Drift / Update Mode
 
@@ -49,4 +52,3 @@ Use this when a repo was previously published but standards improved:
 - Copier/Cruft: committed answers and update/check/diff workflows.
 - PyScaffold/Scientific Python Cookie: one command creates serious project hygiene.
 - GitHub Safe Settings / Probot Settings: settings-as-code works best when protected by CODEOWNERS.
-

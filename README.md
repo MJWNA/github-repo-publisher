@@ -1,5 +1,9 @@
 # GitHub Repo Publisher
 
+[![Validate](https://github.com/MJWNA/github-repo-publisher/actions/workflows/validate.yml/badge.svg?branch=main)](https://github.com/MJWNA/github-repo-publisher/actions/workflows/validate.yml)
+[![Release](https://img.shields.io/github/v/release/MJWNA/github-repo-publisher?style=flat)](https://github.com/MJWNA/github-repo-publisher/releases)
+[![License](https://img.shields.io/github/license/MJWNA/github-repo-publisher?style=flat)](LICENSE)
+
 GitHub Repo Publisher is a Codex skill for turning a local project into a complete, trustworthy GitHub repository. It guides an agent through repo metadata, public/private visibility decisions, README quality, community files, security defaults, branch protections, release setup, and final verification.
 
 The goal is simple: when you ask an agent to publish a repo, it should not just push code. It should create a repository that explains itself, protects itself, and gives the next maintainer enough context to run, review, support, and improve it.
@@ -51,6 +55,8 @@ The workflow is intentionally conservative. It treats visibility as a security d
 - Public and private repo publishing guidance with different safeguards.
 - Operating modes for new repos, existing repos, audits, updates, and releases.
 - Profiles for minimal repos, internal tools, public open source, packages, docs sites, and strict governance.
+- Profile-gated README badge guidance so repos get useful live status signals without badge clutter.
+- Repo polish guidance for community profile, social preview, citation/funding, governance, maintenance state, and issue routing.
 - README guidance focused on plain-English value, technical mechanics, commands, workflows, troubleshooting, and ownership.
 - `.repo-publisher.yml` manifest template for repeatable repo decisions.
 - Lightweight secret preflight script for local source scanning before publication.
@@ -69,8 +75,10 @@ The workflow is intentionally conservative. It treats visibility as a security d
 ├── references/
 │   ├── gh-command-reference.md      # Compact GitHub CLI and API command patterns
 │   ├── profile-matrix.md            # Mode/profile selection and hardening defaults
+│   ├── readme-badges.md             # Badge budgets, ordering, examples, and anti-patterns
 │   ├── readme-patterns.md           # README requirements and public/private structures
 │   ├── release-workflows.md         # Release automation decision guide
+│   ├── repo-polish-conventions.md   # Community profile, social preview, governance, status
 │   ├── repo-checklist.md            # End-to-end repo publishing checklist
 │   └── security-settings.md         # Rulesets, protections, Actions, Dependabot, CODEOWNERS
 ├── scripts/
@@ -220,7 +228,13 @@ gh api repos/OWNER/REPO/rulesets --jq 'map({name,enforcement,target})'
 
 ## Release Process
 
-This skill does not require package publishing. Releases are useful when the workflow changes materially and other users may want a stable checkpoint.
+This repo uses SemVer-style Git tags and GitHub Releases. It does not use heavy package-release automation because this is a Codex skill, not an npm/PyPI package.
+
+While the skill is pre-1.0, minor versions may still change behavior. After `v1.0.0`:
+
+- PATCH: wording fixes, documentation clarifications, non-breaking template fixes, and compatible script fixes.
+- MINOR: new optional workflows, references, examples, templates, or compatible behavior.
+- MAJOR: changed invocation contract, required tools, install layout, outputs, defaults, or breaking script behavior.
 
 Recommended manual release flow:
 
@@ -252,6 +266,7 @@ Useful future improvements:
 - Add a small manifest validator for `.repo-publisher.yml`.
 - Add more profile-specific README examples.
 - Add safer API payload rendering that substitutes owner, repo, branch, and check names before applying settings.
+- Add a custom social preview image for sharper link sharing.
 
 ## Support
 
