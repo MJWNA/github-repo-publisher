@@ -130,7 +130,7 @@ Success looks like this: Codex states the publishing contract, scans the repo, w
 | `gh repo create OWNER/REPO --public --source=. --remote=origin --push` | Create and push a new public repo from a prepared local checkout. |
 | `gh repo edit OWNER/REPO --description "..." --enable-issues --delete-branch-on-merge` | Apply common repository metadata and behavior settings. |
 | `gh api repos/OWNER/REPO/topics --method PUT --field names[]="topic"` | Apply topics when high-level `gh` flags are not enough. |
-| `gh api repos/OWNER/REPO/rulesets --input templates/api/ruleset-main-light.json` | Create a repository ruleset after checking branch names and plan support. |
+| `gh api repos/OWNER/REPO/rulesets --input templates/api/ruleset-main-light.json` | Create a solo-friendly repository ruleset after checking branch names and plan support. |
 
 ## Configuration
 

@@ -56,8 +56,9 @@ Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`,
    - Use git push or the contents API for files.
 5. Apply protections after the default branch exists.
    - Prefer rulesets when plan/org support allows; use classic branch protection as fallback.
-   - Require PRs, status checks once CI names are known, code-owner review where CODEOWNERS exists, no force pushes, no branch deletion, and linear history when it matches the repo workflow.
-   - Use `templates/api/ruleset-main-light.json`, `templates/api/ruleset-main-strict.json`, or `templates/api/ruleset-tags-release.json` as starting points.
+   - For solo-maintainer or early public repos, prefer a light ruleset that blocks force pushes/deletion and allows PR merges without requiring a second reviewer.
+   - Require review, code-owner review, last-push approval, or required status checks only when there are real reviewers/check names available; do not create a ruleset that deadlocks normal maintenance.
+   - Use `templates/api/ruleset-main-light.json` or `templates/api/ruleset-main.json` for solo-friendly defaults, `templates/api/ruleset-main-strict.json` for mature team repos, and `templates/api/ruleset-tags-release.json` for versioned release tags.
 6. Verify.
    - Re-read repo metadata with `gh repo view`.
    - Check topics, files, default branch, rules/protection, Actions permissions, and security features.

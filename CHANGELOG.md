@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Relaxed the baked light/default main-branch rulesets so solo-maintainer repos can merge PRs without impossible self-review.
 - Added profile-gated README badge guidance and badge quality checks.
 - Added repo polish conventions covering community profile, social preview, citation/funding, governance, maintenance status, and issue routing.
 - Added lightweight SemVer/GitHub Releases policy for public skill repositories.

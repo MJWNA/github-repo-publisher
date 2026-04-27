@@ -23,10 +23,11 @@ Prefer rulesets when available because multiple rulesets can layer, enforcement 
 Baseline default branch rules:
 
 - Require pull request before merging.
-- Require at least one approving review.
-- Require CODEOWNER review when `.github/CODEOWNERS` exists.
-- Dismiss stale approvals when sensitive code changes, when appropriate.
-- Require status checks after CI names are known.
+- For solo-maintainer or early public repos, do not require approving review or CODEOWNER review by default. GitHub does not allow authors to approve their own pull requests, so review requirements can deadlock a one-maintainer repo.
+- Require at least one approving review only when a second reviewer actually exists.
+- Require CODEOWNER review only when CODEOWNERS maps to real reviewers who can approve.
+- Dismiss stale approvals when sensitive code changes, when appropriate and reviewers exist.
+- Require status checks only after CI names are known.
 - Require conversation resolution.
 - Block force pushes.
 - Block deletions.
@@ -37,7 +38,8 @@ Do not require unknown status checks before the first CI run has created real ch
 
 Use these starting templates:
 
-- `templates/api/ruleset-main-light.json` for most repos.
+- `templates/api/ruleset-main-light.json` for most solo-maintainer, early public, or low-risk repos.
+- `templates/api/ruleset-main.json` for the same solo-friendly baseline with the historical template name.
 - `templates/api/ruleset-main-strict.json` for mature public repos or sensitive private repos.
 - `templates/api/ruleset-tags-release.json` for versioned release tags.
 
