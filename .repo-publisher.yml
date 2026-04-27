@@ -40,3 +40,19 @@ verification:
   readme_completeness: true
   secret_preflight: true
   github_readback: true
+repo_polish:
+  maintenance_status: active
+  support_channel: GitHub issues
+  security_contact: SECURITY.md
+  governance_model: maintainer-led
+  screenshots_required: false
+  demo_media_required: false
+  social_preview_required: true
+  citation_required: false
+  funding_required: false
+  releases_required: true
+  changelog_style: generated-notes
+  badge_policy: profile-default
+  issue_policy:
+    blank_issues_enabled: false
+    security_reports_external: true

@@ -19,7 +19,7 @@ Pick the mode first and say it back before writing or publishing:
 | `update` | Bringing an older repo up to the current publisher baseline | Use `.repo-publisher.yml` when present; show drift before patching. |
 | `release` | Tagging or drafting a release after repo setup | Use draft/review gates unless full automation is explicitly part of the repo contract. |
 
-Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`, `public-oss`, `package`, `docs-site`, and `strict`. Read `references/profile-matrix.md` when choosing a profile.
+Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`, `public-oss`, `package`, `docs-site`, and `strict`. Read `references/profile-matrix.md` when choosing a profile. For public skill repositories, prefer lightweight SemVer tags plus reviewed GitHub Releases once the skill has users or a stable installable snapshot.
 
 ## Non-negotiables
 
@@ -46,7 +46,8 @@ Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`,
 3. Generate the repository files.
    - Always: `README.md`, `.gitignore`, `SECURITY.md`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/*`, `.github/CODEOWNERS` when owners are known, and CI if commands are known.
    - The README must be complete enough for a stakeholder to understand the value and for an engineer to run, verify, maintain, and extend the repo.
-   - Public/community-facing: add `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`, release/changelog guidance, discoverability topics, and social preview notes.
+   - Add README badges only when they reflect live, useful signals for the selected profile. Read `references/readme-badges.md`; avoid badge soup, fake status badges, private-token badge URLs, and vanity counters without a purpose.
+   - Public/community-facing: add `LICENSE`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SUPPORT.md`, release/changelog guidance, discoverability topics, repo polish conventions, and social preview notes.
    - Private/internal: add ownership, environment, deployment, data classification, access boundaries, and runbook links without exposing sensitive detail.
    - Reuse files under `templates/` when they fit; replace placeholders before committing.
 4. Create or update the GitHub repo.
@@ -60,7 +61,7 @@ Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`,
 6. Verify.
    - Re-read repo metadata with `gh repo view`.
    - Check topics, files, default branch, rules/protection, Actions permissions, and security features.
-   - Check README completeness and unresolved placeholders.
+   - Check README completeness, unresolved placeholders, badge quality, badge targets, and private-token leakage.
    - For public repos, check the GitHub community profile and README rendering when possible.
 
 ## Visibility defaults
@@ -103,6 +104,7 @@ Templates include API payloads under `templates/api/` as starting points for `gh
 Use `release` mode only after repo readiness is good:
 
 - Draft release: use `gh release create TAG --draft --generate-notes` for simple repos.
+- Public Codex/agent skill repo: use SemVer-style tags and reviewed GitHub Releases; keep automation optional until the repo is PR-heavy or package-like.
 - Release Drafter: good default when PR labels should accumulate human-reviewed release notes.
 - Release Please: good when version/changelog/release should be prepared in a PR.
 - semantic-release: only for repos that intentionally use Conventional Commits and automated package publishing.
@@ -116,6 +118,8 @@ Load only the needed reference:
 - `references/repo-checklist.md` for the complete public/private creation checklist, fields, and verification commands.
 - `references/profile-matrix.md` for mode/profile selection and hardening defaults.
 - `references/readme-patterns.md` for README structures and copy requirements.
+- `references/readme-badges.md` for profile-gated README badges and status signal rules.
+- `references/repo-polish-conventions.md` for community profile, social preview, citation/funding, governance, maintenance status, and repo trust surface conventions.
 - `references/security-settings.md` for rulesets, branch protection, Actions, Dependabot, secret scanning, CODEOWNERS, and private repo safeguards.
 - `references/release-workflows.md` for release automation selection.
 - `references/gh-command-reference.md` for compact `gh` and `gh api` command patterns.
