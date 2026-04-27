@@ -104,8 +104,9 @@ See `security-settings.md` for details. Minimum target:
 
 - ruleset or branch protection on default branch
 - require pull requests
-- require at least one approval
-- require code-owner review when CODEOWNERS exists
+- for solo-maintainer/early repos, allow PR merge with zero required approving reviews to avoid self-review deadlock
+- require at least one approval only when another reviewer exists
+- require code-owner review only when CODEOWNERS maps to real approvers
 - require status checks after CI exists and check names are known
 - block force pushes and deletion
 - read-only default Actions token
