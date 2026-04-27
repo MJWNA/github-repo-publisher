@@ -1,0 +1,40 @@
+version: 1
+mode: new-repo
+profile: internal-tool
+owner: OWNER_OR_ORG
+repo: REPO_NAME
+visibility: private
+default_branch: main
+description: SHORT_DESCRIPTION
+homepage: ""
+topics: []
+license: ""
+gitignore_template: ""
+maintainers:
+  owner_team: ""
+  technical_owner: ""
+  business_owner: ""
+contacts:
+  support: ""
+  security: ""
+data:
+  classification: ""
+  production_write_paths: []
+  secrets_location: "Reference only; never commit secret values."
+features:
+  issues: true
+  wiki: false
+  discussions: false
+  projects: false
+hardening:
+  ruleset: light
+  codeowners_required: true
+  dependabot: true
+  codeql: false
+  scorecard: false
+release:
+  strategy: none
+  initial_tag: ""
+skips:
+  # item: reason
+
