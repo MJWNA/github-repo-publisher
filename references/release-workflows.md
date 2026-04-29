@@ -28,6 +28,60 @@ Use SemVer once the skill has a public contract:
 
 Keep pre-1.0 releases honest: `v0.x.y` means the skill is useful but the contract may still move.
 
+## Versioned Release Checklist
+
+Use this checklist whenever the repo contract says releases are required, the
+user asks for a production version, or the work changed an installable
+skill/tool:
+
+1. Refresh state:
+   - `gh auth status`
+   - `git status -sb`
+   - `git fetch --tags --prune`
+   - `gh release list --limit 10`
+   - `gh repo view OWNER/REPO --json defaultBranchRef,latestRelease,pushedAt`
+2. Choose the bump:
+   - PATCH for docs, examples, compatible bug fixes, and non-breaking template
+     fixes.
+   - MINOR for compatible new workflows, templates, references, profiles,
+     commands, or behavior.
+   - MAJOR for changed invocation contract, required tools, install layout,
+     defaults, output contract, or migration burden.
+3. Update version surfaces together:
+   - `VERSION`, package metadata, lockfiles when relevant.
+   - `CHANGELOG.md`, with shipped bullets moved out of `Unreleased`.
+   - `.repo-publisher.yml` release fields such as `current_tag`,
+     `version_file`, `changelog_file`, `release_workflow`, and artifact
+     expectations.
+   - README badges/examples/docs that display the current version.
+   - Installed/runtime copies for skill repos after verification, not before.
+4. Verify locally:
+   - project tests/evaluators/builds.
+   - README completeness if README changed.
+   - secret preflight and, for public/high-risk repos, a dedicated history
+     scanner if available.
+   - release workflow scripts locally when the repo has them.
+5. Publish through the repo's protection model:
+   - direct default-branch push only when explicitly allowed.
+   - otherwise branch -> PR -> required checks -> merge.
+6. Tag the merged default-branch commit:
+   - confirm `git rev-parse HEAD` is the intended release commit.
+   - `git tag vX.Y.Z`
+   - `git push origin vX.Y.Z`
+   - verify `git ls-remote --tags origin vX.Y.Z`.
+7. Create or update the GitHub Release:
+   - include user-visible changes, verification, artifact notes, and a compare
+     URL.
+   - create a draft first when notes/assets require review or immutable
+     releases/assets are in use.
+   - publish only when the user or repo contract authorizes publishing.
+8. Read back completion:
+   - `gh release view vX.Y.Z --json tagName,name,isDraft,isPrerelease,publishedAt,url,targetCommitish`
+   - `gh release list --limit 5`
+   - `gh repo view OWNER/REPO --json latestRelease`
+   - release workflow run/artifact status when present.
+   - installed/runtime parity for skill/tool repos.
+
 ## Draft Release Flow
 
 ```bash
@@ -40,6 +94,8 @@ Before publishing:
 
 - confirm tests/build passed
 - confirm README and changelog are current
+- confirm version metadata and `.repo-publisher.yml` release fields match the tag
+- confirm the tag points at the intended default-branch commit
 - inspect generated notes
 - attach assets only if they are intentional deliverables
 
@@ -53,6 +109,8 @@ Borrowed from strong `gh-release` skills:
 - group notes by user-visible changes, fixes, docs, chores, and breaking changes
 - include compare URL
 - create draft first unless automation is explicitly approved
+- avoid inline shell notes when Markdown contains backticks or substitutions; use a notes file or carefully quoted argument
+- mention verification and any skipped checks with reasons
 
 ## Automation Templates
 

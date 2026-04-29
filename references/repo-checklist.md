@@ -65,6 +65,9 @@ Always consider:
 - `.github/CODEOWNERS` if owners are known
 - `.github/workflows/ci.yml` if build/test commands are known
 - `.github/dependabot.yml` if package ecosystems are known
+- `VERSION` or package version metadata when the repo is versioned
+- `CHANGELOG.md` or an explicit generated-release-notes policy when releases are expected
+- release workflow/configuration when release artifacts or gates are expected
 
 Public/community-facing:
 
@@ -97,6 +100,28 @@ Apply when appropriate:
 - squash merge enabled for clean history; disable unused merge methods if the team has a convention
 - default branch set to `main` after it exists
 - repository custom properties for org governance, e.g. owner team, service, environment, data classification
+
+## P1 Versioning And Release Readiness
+
+For versioned repos, especially installable skills, CLIs, packages, plugins, and
+templates:
+
+- Choose SemVer unless the repo contract explicitly prefers CalVer or another
+  scheme.
+- Capture release strategy in `.repo-publisher.yml`: current tag, version file,
+  changelog file, release workflow, artifact expectations, and whether releases
+  are draft-reviewed or automated.
+- Keep `Unreleased` for future work and move shipped bullets into the new
+  release section.
+- Verify the new tag does not already exist locally or remotely before creating
+  it.
+- Tag only the merged default-branch commit that passed checks.
+- Confirm `VERSION` or package metadata, changelog, manifest, tag, GitHub
+  Release, and latest release all agree.
+- Run any manual release workflow and verify artifact upload when the repo has
+  one.
+- For installed skills/tools, sync the runtime copy only after the repo release
+  checks pass, then verify installed/runtime parity.
 
 ## P1 Protection And Security
 
@@ -144,6 +169,10 @@ gh api repos/OWNER/REPO --jq '{visibility,has_issues,has_wiki,has_discussions,de
 gh api repos/OWNER/REPO/topics --jq '.names'
 gh api repos/OWNER/REPO/rulesets --jq 'map({name,enforcement,target})'
 gh api repos/OWNER/REPO/contents/README.md --jq '.html_url'
+gh release list --limit 10
+gh release view vX.Y.Z --json tagName,name,isDraft,isPrerelease,publishedAt,url,targetCommitish
+gh repo view OWNER/REPO --json latestRelease
+git ls-remote --tags origin vX.Y.Z
 ```
 
 If verification fails because of plan/licensing, report exactly what was skipped and why.

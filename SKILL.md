@@ -17,7 +17,7 @@ Pick the mode first and say it back before writing or publishing:
 | `existing-repo` | Polishing a repo that already exists | Audit first, show patch summary, preserve existing docs unless replacing is clearly better. |
 | `audit` | Checking repo readiness without changing it | Report gaps against the selected profile. |
 | `update` | Bringing an older repo up to the current publisher baseline | Use `.repo-publisher.yml` when present; show drift before patching. |
-| `release` | Tagging or drafting a release after repo setup | Use draft/review gates unless full automation is explicitly part of the repo contract. |
+| `release` | Versioning, tagging, drafting, publishing, or verifying a release after repo setup | Align version files, changelog, manifest, tag, release notes, CI/artifacts, and latest-release read-back before calling it done. |
 
 Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`, `public-oss`, `package`, `docs-site`, and `strict`. Read `references/profile-matrix.md` when choosing a profile. For public skill repositories, prefer lightweight SemVer tags plus reviewed GitHub Releases once the skill has users or a stable installable snapshot.
 
@@ -31,15 +31,19 @@ Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`,
 - Treat `README.md` as the repo's operating explanation, not a placeholder: it must explain plain-English value, technical mechanics, workflow, commands, problems solved, and why the repo matters.
 - Prefer non-overwrite updates for existing repos: show what will change, preserve useful existing content, and make the smallest patch that raises repo quality.
 - When docs/settings may have changed, refresh with official GitHub docs, GitHub CLI help, or Context7 before applying risky settings.
+- For versioned repos, do not publish or report completion until version metadata, changelog/release notes, tag, GitHub Release, CI/release workflow, and read-back checks agree.
+- Use protected-branch-safe publishing by default: if `main` rejects direct pushes or rules require PRs, switch to branch -> PR -> green checks -> merge -> tag the merged default-branch commit.
 
 ## Workflow
 
 1. Define the repo contract.
    - mode, profile, owner/org, repo name, description, homepage, visibility, default branch, source path, license, gitignore template, topics, maintainers, support/security contact, and whether it is public/open-source or private/internal.
+   - versioning contract when releases are expected: SemVer/CalVer/manual/automated, version file, changelog style, release workflow, artifact expectations, current/latest tag, and installed/runtime copy paths if the repo publishes a skill or tool.
    - If visibility is not explicit and the project may contain proprietary or client/business data, default to private and say why.
    - Create or update `.repo-publisher.yml` so future sessions can audit/update the repo without re-deriving decisions.
 2. Audit local source before publishing.
-   - Check current git status/remotes and scan for obvious secret files.
+   - Check `gh auth status`, current git status/remotes/branch, default branch sync, latest local and remote tags/releases, and scan for obvious secret files.
+   - For skill/tool repos with an installed runtime copy, compare source checkout, installed copy, and public repo state before editing; choose one source of truth and do not overwrite unrelated local changes.
    - Run `scripts/secret-preflight.sh <path>` from this skill when publishing local code.
    - Run `scripts/readme-completeness.py <path>/README.md` after generating or changing a README.
    - Do not push unrelated user changes or accidental local artifacts.
@@ -53,7 +57,7 @@ Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`,
 4. Create or update the GitHub repo.
    - Prefer `gh repo create` for creation and `gh repo edit` for supported settings.
    - Use `gh api` for topics, rulesets, branch protection, Actions permissions, custom properties, and security settings not exposed by high-level `gh` flags.
-   - Use git push or the contents API for files.
+   - Use git push or the contents API for files. Prefer a branch and PR when branch rules are unknown or active; only push directly to the default branch when the repo contract allows it.
 5. Apply protections after the default branch exists.
    - Prefer rulesets when plan/org support allows; use classic branch protection as fallback.
    - For solo-maintainer or early public repos, prefer a light ruleset that blocks force pushes/deletion and allows PR merges without requiring a second reviewer.
@@ -63,6 +67,7 @@ Use profiles rather than one-size-fits-all defaults: `minimal`, `internal-tool`,
    - Re-read repo metadata with `gh repo view`.
    - Check topics, files, default branch, rules/protection, Actions permissions, and security features.
    - Check README completeness, unresolved placeholders, badge quality, badge targets, and private-token leakage.
+   - For versioned releases, verify `VERSION` or package metadata, `CHANGELOG.md`, `.repo-publisher.yml`, local and remote tag, GitHub Release, latest release, release workflow/artifacts when present, and that the tag points at the intended default-branch commit.
    - For public repos, check the GitHub community profile and README rendering when possible.
 
 ## Visibility defaults
@@ -104,8 +109,15 @@ Templates include API payloads under `templates/api/` as starting points for `gh
 
 Use `release` mode only after repo readiness is good:
 
-- Draft release: use `gh release create TAG --draft --generate-notes` for simple repos.
-- Public Codex/agent skill repo: use SemVer-style tags and reviewed GitHub Releases; keep automation optional until the repo is PR-heavy or package-like.
+- Pick and state the version bump before editing: PATCH for docs/non-breaking fixes, MINOR for compatible new workflows/templates/behavior, MAJOR for changed invocation/install/output/default contracts.
+- Update every version surface in the same PR: `VERSION`, package metadata, `CHANGELOG.md`, `.repo-publisher.yml` release fields, install/runtime manifests, and generated docs that display the current tag.
+- Move shipped changelog bullets out of `Unreleased`; leave a fresh `Unreleased` placeholder for the next cycle.
+- Use a clean branch from the current default branch, open a PR, wait for required checks, and merge before tagging when branch protection or rulesets apply.
+- Create the tag on the merged default-branch commit, push it, and verify remote tag read-back before creating the GitHub Release.
+- Draft release: use `gh release create TAG --draft --generate-notes` for simple repos. Publish only after notes/assets/checks are reviewed, unless the user explicitly asked for a fully automated release.
+- Public Codex/agent skill repo: use SemVer-style tags plus reviewed GitHub Releases; keep automation optional until the repo is PR-heavy or package-like.
+- If a release workflow exists, trigger or verify it, then confirm the workflow checked version/changelog/tag alignment and uploaded the intended artifacts.
+- Read back `gh release view`, `gh release list`, `gh repo view --json latestRelease`, and `git ls-remote --tags` before calling the release complete.
 - Release Drafter: good default when PR labels should accumulate human-reviewed release notes.
 - Release Please: good when version/changelog/release should be prepared in a PR.
 - semantic-release: only for repos that intentionally use Conventional Commits and automated package publishing.
@@ -136,5 +148,6 @@ When invoked, return a concise publishing plan before destructive/remote actions
 - files created or updated
 - settings applied
 - protections/security features enabled or skipped with reasons
+- PR, merge commit, version, tag, release URL, release workflow/artifact status, and installed/runtime parity when release mode was used
 - verification commands/results
 - any manual follow-up, especially social preview upload or plan/licensing limitations

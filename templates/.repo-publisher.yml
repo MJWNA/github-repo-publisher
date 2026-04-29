@@ -35,6 +35,13 @@ hardening:
 release:
   strategy: none
   initial_tag: ""
+  current_tag: ""
+  version_scheme: semver
+  version_file: ""
+  changelog_file: CHANGELOG.md
+  release_workflow: ""
+  artifact_expectations: []
+  draft_required: true
 repo_polish:
   maintenance_status: active # active | maintenance-only | deprecated | archived | experimental | internal-only
   support_channel: ""

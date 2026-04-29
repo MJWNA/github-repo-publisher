@@ -36,6 +36,15 @@ security:
   scorecard: true
   secret_scanning: true
   push_protection: true
+release:
+  strategy: manual
+  current_tag: v0.2.0
+  version_scheme: semver
+  version_file: VERSION
+  changelog_file: CHANGELOG.md
+  release_workflow: ""
+  artifact_expectations: []
+  draft_required: true
 verification:
   readme_completeness: true
   secret_preflight: true
