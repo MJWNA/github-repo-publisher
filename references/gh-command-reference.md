@@ -9,6 +9,7 @@ gh auth status
 git status -sb
 git remote -v
 git branch --show-current
+git fetch --tags --prune
 ```
 
 ## Create / Edit
@@ -44,9 +45,18 @@ For PR bodies and release notes, prefer body files over inline shell strings so 
 
 ```bash
 gh release list --limit 10
+gh repo view OWNER/REPO --json defaultBranchRef,latestRelease,pushedAt
+git tag --list v0.1.0
+git ls-remote --tags origin v0.1.0
+git rev-parse HEAD
 gh release create v0.1.0 --draft --generate-notes --title "v0.1.0"
-gh release view v0.1.0 --json tagName,name,isDraft,url
+gh release view v0.1.0 --json tagName,name,isDraft,isPrerelease,publishedAt,url,targetCommitish
+gh workflow run release.yml --repo OWNER/REPO --ref main -f version=0.1.0
+gh run watch RUN_ID --repo OWNER/REPO --exit-status
 ```
+
+Create release notes from a file when Markdown contains backticks, command
+substitution characters, or long verification lists.
 
 ## Safety
 
@@ -54,4 +64,3 @@ gh release view v0.1.0 --json tagName,name,isDraft,url
 - Verify before and after changing visibility.
 - Do not inline secrets into command arguments.
 - Prefer `--json` plus `--jq` for read-back checks.
-
